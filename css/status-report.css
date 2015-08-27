@@ -1,0 +1,62 @@
+/**
+ * @file
+ * Status Report styles.
+ */
+.page-admin-reports .path-admin-reports-status-report span.icon {
+  background: url('../img/status-report-menu.png') no-repeat 0 0;
+}
+.page-admin-reports tr td {
+  background: none;
+  min-width: 25px;
+}
+.page-admin-reports tr td.status-report-response {
+  font-weight: bold;
+  line-height: 35px;
+}
+.page-admin-reports tr.status-report-complete {
+  cursor: pointer;
+}
+.page-admin-reports tr.status-report-complete.open {
+  background-repeat: no-repeat;
+  background-position: 20px 20px;
+}
+.page-admin-reports tr.status-report-complete.open ul {
+  display: block;
+}
+.page-admin-reports tr.status-report-complete.open td.status-report-icon {
+  background-image: url('../../../../../../misc/menu-expanded.png');
+}
+.page-admin-reports tr.status-report-complete td.status-report-icon {
+  background: url('../../../../../../misc/menu-collapsed.png') no-repeat 20px 20px;
+}
+.page-admin-reports tr.status-report-complete ul {
+  display: none;
+  list-style-type: square;
+  padding-left: 15px;
+}
+.page-admin-reports tr.status-report-complete ul li {
+  list-style-type: square;
+  display: list-item;
+  padding-left: 5px;
+  border: none;
+}
+.page-admin-reports tr.status-report-complete:hover td {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+.page-admin-reports .ajax-progress {
+  display: inline-block;
+}
+.page-admin-reports .ajax-progress .throbber {
+  background: transparent url('../../../../../../misc/throbber.gif') no-repeat 0px -18px;
+  height: 15px;
+  margin: 10px 0 10px 10px;
+  width: 15px;
+  display: block;
+}
+.page-admin-reports .debug-result {
+  width: 100%;
+  display: none;
+}
+.page-admin-reports .debug-result.open {
+  display: block;
+}

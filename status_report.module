@@ -1,0 +1,179 @@
+<?php
+/**
+ * @file
+ * Main module file for Status Report module.
+ *
+ * Status Report is a framework for providing statuses for
+ * integration services that can be intermittent and unstable.
+ *
+ * This module does not replace the comprehensive testing set up to cover user
+ * single sign on and provisioning however it does provide a simple overview
+ * of which services are available.
+ *
+ * @see status_report.api.php
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function status_report_menu() {
+  $items = array();
+
+  $items['admin/reports/status-report'] = array(
+    'title' => 'Status Report',
+    'description' => 'Status page for 3rd party integrations',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'status_report_access',
+    'page callback' => 'status_report_page',
+  );
+
+  $items['admin/reports/status-report/%'] = array(
+    'title' => 'Status Report callback',
+    'description' => 'Callback for Status Report handler classes.',
+    'type' => MENU_CALLBACK,
+    'access callback' => 'status_report_access',
+    'page callback' => 'status_report_class_callback',
+    'page arguments' => array(3),
+  );
+
+  return $items;
+}
+
+/**
+ * Access callback for status page.
+ */
+function status_report_access() {
+  return user_access('administer site configuration');
+}
+
+/**
+ * Status page callback.
+ */
+function status_report_page() {
+  // Status page front-end resources.
+  drupal_add_js(drupal_get_path('module', 'status_report') . '/js/status-report.js');
+  drupal_add_css(drupal_get_path('module', 'status_report') . '/css/status-report.css');
+
+  // Set up the status table.
+  $status_table = array(
+    '#theme' => 'table',
+    '#header' => array('', 'Status type', 'Result'),
+    '#rows' => array(),
+    '#empty' => t('No status handlers found.'),
+    '#suffix' => '',
+  );
+
+  // Get all status handlers defined by hook_status_report_handlers().
+  $status_handlers = _status_report_get_status_handlers();
+  if (empty($status_handlers)) {
+    return drupal_render($status_table);
+  }
+
+  foreach ($status_handlers as $class_name => $handler) {
+    // Prevent status handlers which aren't available from executing.
+    if (!$handler->access()) {
+      continue;
+    }
+    // Attach the JavaScript file defined by the status handler class as an
+    // inline javascript at the end of the table between Drupal settings and
+    // library scripts and the footer of the page.
+    if ($handler->js) {
+      $status_table['#suffix'] .= theme('html_tag', array(
+        'element' => array(
+          '#tag' => 'script',
+          '#value' => '',
+          '#attributes' => array(
+            'type' => 'text/javascript',
+            'src' => url($handler->js),
+          ),
+        ),
+      ));
+    }
+
+    // Attach any JavaScript firing callbacks in iFrames underneath the table.
+    if ($handler->useCallback) {
+      $url_attributes = array(
+        'absolute' => TRUE,
+        'https' => $handler->secureCallback ? TRUE : FALSE,
+      );
+      $iframe_url = url('admin/reports/status-report/' . $class_name, $url_attributes);
+      $status_table['#suffix'] .= '<iframe class="debug-result" data-debug-result="' . $class_name . '" src="' . $iframe_url . '"></iframe>';
+    }
+
+    // Any hooks or additional page markup required by the handler for the
+    // status page get invoked here and added underneath the table.
+    if ($output = $handler->statusPage()) {
+      $status_table['#suffix'] .= $output;
+    }
+
+    // Add the table row for the status handler.
+    $status_table['#rows'][] = array(
+      'data' => array(
+        // Column 1: Loading.
+        array(
+          'data' => '<div class="ajax-progress ajax-progress-throbber"><div class="throbber">&nbsp;</div></div>',
+          'class' => array('status-report-icon'),
+        ),
+        // Column 2: Handler name and description.
+        array(
+          'data' => '<strong>' . $handler->name . '</strong><br />' . $handler->description,
+          'class' => array('status-report-message'),
+        ),
+        // Column 3: Response area.
+        array(
+          'data' => t('Loading ...'),
+          'class' => array('status-report-response'),
+        ),
+      ),
+      // Add the class name for the handler in the data-status-result attribute
+      // for the row for referencing by JavaScript.
+      'data-status-result' => $class_name,
+      // By default all status rows start their life in amber mode.
+      'class' => array(
+        'warning',
+      ),
+    );
+  }
+
+  return drupal_render($status_table);
+}
+
+/**
+ * Menu callback for status class menu callback functions.
+ *
+ * @param string $class_name
+ *   The status class who's handler is being called.
+ */
+function status_report_class_callback($class_name) {
+  $class_name = check_plain($class_name);
+  if (class_exists($class_name)) {
+    $status_report = new $class_name();
+    drupal_add_http_header('Cache-Control', 'no-cache');
+    drupal_add_http_header('Pragma', 'no-cache');
+    drupal_add_http_header('Expires', '-1');
+    print $status_report->menuCallback();
+  }
+  else {
+    watchdog('status_report', 'Unable to instantiate status class @class', array('@class' => $class_name));
+  }
+  drupal_exit();
+}
+
+/**
+ * Get user status classes.
+ *
+ * @return array
+ *   Invoke hook_status_report_handlers() and retrieve all the available
+ *   status classes.
+ */
+function _status_report_get_status_handlers() {
+  $handlers = &drupal_static(__FUNCTION__);
+  if (!isset($handlers)) {
+    $classes = module_invoke_all('status_report_handlers');
+    foreach ($classes as $class) {
+      $handlers[$class] = new $class();
+    }
+  }
+
+  return $handlers;
+}
