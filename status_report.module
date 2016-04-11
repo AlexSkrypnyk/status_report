@@ -17,24 +17,24 @@
  * Implements hook_menu().
  */
 function status_report_menu() {
-  $items = array();
+  $items = [];
 
-  $items['admin/reports/status-report'] = array(
-    'title' => 'Status Report',
+  $items['admin/reports/integration-status-report'] = [
+    'title' => 'Integration Status Report',
     'description' => 'Status page for 3rd party integrations',
     'type' => MENU_NORMAL_ITEM,
     'access callback' => 'status_report_access',
     'page callback' => 'status_report_page',
-  );
+  ];
 
-  $items['admin/reports/status-report/%'] = array(
+  $items['admin/reports/status-report/%'] = [
     'title' => 'Status Report callback',
     'description' => 'Callback for Status Report handler classes.',
     'type' => MENU_CALLBACK,
     'access callback' => 'status_report_access',
     'page callback' => 'status_report_class_callback',
-    'page arguments' => array(3),
-  );
+    'page arguments' => [3],
+  ];
 
   return $items;
 }
@@ -55,13 +55,13 @@ function status_report_page() {
   drupal_add_css(drupal_get_path('module', 'status_report') . '/css/status-report.css');
 
   // Set up the status table.
-  $status_table = array(
+  $status_table = [
     '#theme' => 'table',
-    '#header' => array('', 'Status type', 'Result'),
-    '#rows' => array(),
+    '#header' => ['', 'Status type', 'Result'],
+    '#rows' => [],
     '#empty' => t('No status handlers found.'),
     '#suffix' => '',
-  );
+  ];
 
   // Get all status handlers defined by hook_status_report_handlers().
   $status_handlers = _status_report_get_status_handlers();
@@ -78,24 +78,24 @@ function status_report_page() {
     // inline javascript at the end of the table between Drupal settings and
     // library scripts and the footer of the page.
     if ($handler->js) {
-      $status_table['#suffix'] .= theme('html_tag', array(
-        'element' => array(
+      $status_table['#suffix'] .= theme('html_tag', [
+        'element' => [
           '#tag' => 'script',
           '#value' => '',
-          '#attributes' => array(
+          '#attributes' => [
             'type' => 'text/javascript',
             'src' => url($handler->js),
-          ),
-        ),
-      ));
+          ],
+        ],
+      ]);
     }
 
     // Attach any JavaScript firing callbacks in iFrames underneath the table.
     if ($handler->useCallback) {
-      $url_attributes = array(
+      $url_attributes = [
         'absolute' => TRUE,
         'https' => $handler->secureCallback ? TRUE : FALSE,
-      );
+      ];
       $iframe_url = url('admin/reports/status-report/' . $class_name, $url_attributes);
       $status_table['#suffix'] .= '<iframe class="debug-result" data-debug-result="' . $class_name . '" src="' . $iframe_url . '"></iframe>';
     }
@@ -107,32 +107,32 @@ function status_report_page() {
     }
 
     // Add the table row for the status handler.
-    $status_table['#rows'][] = array(
-      'data' => array(
+    $status_table['#rows'][] = [
+      'data' => [
         // Column 1: Loading.
-        array(
+        [
           'data' => '<div class="ajax-progress ajax-progress-throbber"><div class="throbber">&nbsp;</div></div>',
-          'class' => array('status-report-icon'),
-        ),
+          'class' => ['status-report-icon'],
+        ],
         // Column 2: Handler name and description.
-        array(
+        [
           'data' => '<strong>' . $handler->name . '</strong><br />' . $handler->description,
-          'class' => array('status-report-message'),
-        ),
+          'class' => ['status-report-message'],
+        ],
         // Column 3: Response area.
-        array(
+        [
           'data' => t('Loading ...'),
-          'class' => array('status-report-response'),
-        ),
-      ),
+          'class' => ['status-report-response'],
+        ],
+      ],
       // Add the class name for the handler in the data-status-result attribute
       // for the row for referencing by JavaScript.
       'data-status-result' => $class_name,
       // By default all status rows start their life in amber mode.
-      'class' => array(
+      'class' => [
         'warning',
-      ),
-    );
+      ],
+    ];
   }
 
   return drupal_render($status_table);
@@ -154,7 +154,7 @@ function status_report_class_callback($class_name) {
     print $status_report->menuCallback();
   }
   else {
-    watchdog('status_report', 'Unable to instantiate status class @class', array('@class' => $class_name));
+    watchdog('status_report', 'Unable to instantiate status class @class', ['@class' => $class_name]);
   }
   drupal_exit();
 }

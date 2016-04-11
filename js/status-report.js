@@ -5,7 +5,7 @@
 
 /*global jQuery, window, Drupal*/
 (function($) {
-  "use strict";
+  'use strict';
   /**
    * Helper functions for User Status.
    */

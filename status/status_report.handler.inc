@@ -4,6 +4,9 @@
  * StatusReport class for extension by status subclasses.
  */
 
+/**
+ * Class StatusReport.
+ */
 abstract class StatusReport {
   // Name of the status handler, set by info().
   public $name;
@@ -65,12 +68,12 @@ abstract class StatusReport {
 
     // Format any messages as an unordered list.
     if (isset($results['messages'])) {
-      $results['message'] = theme('item_list', array(
+      $results['message'] = theme('item_list', [
         'items' => $results['messages'],
         'title' => '',
         'type' => 'ul',
-        'attributes' => array(),
-      ));
+        'attributes' => [],
+      ]);
     }
     else {
       $results['message'] = '';
@@ -103,13 +106,13 @@ abstract class StatusReport {
    * @see status_report.api.php
    */
   public function info() {
-    $no_info_message = t('Please specify an info hook for status %class.', array(
+    $no_info_message = t('Please specify an info hook for status %class.', [
       '%class' => get_class($this),
-    ));
-    return array(
+    ]);
+    return [
       'name' => $no_info_message,
       'description' => $no_info_message,
-    );
+    ];
   }
 
   /**
@@ -126,11 +129,12 @@ abstract class StatusReport {
    * @see status_report.api.php
    */
   public function callback() {
-    return array(
+    return [
       'success' => FALSE,
-      'messages' => t('Please specify a callback for status %class or use the "no_callback" flag in status info.', array(
+      'messages' => t('Please specify a callback for status %class or use the "no_callback" flag in status info.', [
         '%class' => get_class($this),
-      )),
-    );
+      ]),
+    ];
   }
+
 }

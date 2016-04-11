@@ -11,9 +11,9 @@
  *   A list of class names for status handlers.
  */
 function hook_status_report_handlers() {
-  return array(
+  return [
     'MyModuleExampleStatusReport',
-  );
+  ];
 }
 
 /**
@@ -24,6 +24,7 @@ function hook_status_report_handlers() {
  * declaration in the module info page.
  */
 class MyModuleExampleStatusReport extends StatusReport {
+
   /**
    * Define the properties of the status.
    *
@@ -46,7 +47,7 @@ class MyModuleExampleStatusReport extends StatusReport {
    *       conditions such as environment or user permission.
    */
   public function info() {
-    return array(
+    return [
       // Required parameters:
       'name' => t('Status name'),
       'description' => t('Status description'),
@@ -55,7 +56,7 @@ class MyModuleExampleStatusReport extends StatusReport {
       'secure_callback' => FALSE,
       'use_callback' => FALSE,
       'access' => TRUE,
-    );
+    ];
   }
 
   /**
@@ -79,21 +80,21 @@ class MyModuleExampleStatusReport extends StatusReport {
     // Check for a 200 response and the word 'text' in the response.
     if ($response->code == '200' && strpos($response->data, 'text') !== FALSE) {
       $success = TRUE;
-      $messages[] = t('@url retrieved successfully.', array(
+      $messages[] = t('@url retrieved successfully.', [
         '@url' => $url,
-      ));
+      ]);
     }
     else {
       $success = FALSE;
-      $messages[] = t('@url not retrieved successfully.', array(
+      $messages[] = t('@url not retrieved successfully.', [
         '@url' => $url,
-      ));
+      ]);
     }
 
-    return array(
+    return [
       'success' => $success,
       'messages' => $messages,
-    );
+    ];
   }
 
   /**
@@ -107,4 +108,5 @@ class MyModuleExampleStatusReport extends StatusReport {
   public function statusPage() {
     return '<div class="extra-status-markup">FOO</div>';
   }
+
 }
