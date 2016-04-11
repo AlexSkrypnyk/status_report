@@ -23,7 +23,9 @@ function hook_status_report_handlers() {
  * within the related module. Remember to also add your includes to the files[]
  * declaration in the module info page.
  */
+// @codingStandardsIgnoreStart
 class MyModuleExampleStatusReport extends StatusReport {
+// @codingStandardsIgnoreEnd
 
   /**
    * Define the properties of the status.
