@@ -4,8 +4,7 @@
  */
 
 /*global jQuery, window, Drupal*/
-(function($) {
-  'use strict';
+(function($) {'use strict';
   /**
    * Helper functions for User Status.
    */
