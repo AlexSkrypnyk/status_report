@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * StatusReport class for extension by status subclasses.
+ */
+
+/**
  * Class StatusReport.
  */
 abstract class StatusReport {
