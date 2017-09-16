@@ -1,0 +1,7 @@
+composer.lock
+package.lock
+vendor
+node_modules
+Vagrantfile
+vagrant.d
+.beetbox

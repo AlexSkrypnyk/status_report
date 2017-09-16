@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Api documentation for Status Report module.
@@ -25,7 +26,8 @@ function hook_status_report_handlers() {
  */
 // @codingStandardsIgnoreStart
 class MyModuleExampleStatusReport extends StatusReport {
-// @codingStandardsIgnoreEnd
+
+  // @codingStandardsIgnoreEnd
 
   /**
    * Define the properties of the status.

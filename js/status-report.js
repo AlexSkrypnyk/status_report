@@ -3,8 +3,7 @@
  * User status table JavaScript response handlers.
  */
 
-/*global jQuery, window, Drupal*/
-(function($) {
+(function ($) {
   'use strict';
   /**
    * Helper functions for User Status.
@@ -22,10 +21,10 @@
      * @param time number
      *   The amount of milliseconds it took to complete the callback.
      */
-    statusReceived: function(passed, className, message, time) {
+    statusReceived: function (passed, className, message, time) {
       var $statusRow = $('[data-status-result="' + className + '"]'),
-          $statusDebug = $('[data-debug-result="' + className + '"]'),
-          responseText = '';
+        $statusDebug = $('[data-debug-result="' + className + '"]'),
+        responseText = '';
 
       $statusRow.addClass('status-report-complete');
 
@@ -55,7 +54,7 @@
    * Only fire statusReceived if the message is an object and has the type
    * 'bsUserStatusHandler'.
    */
-  window.addEventListener('message', function(e) {
+  window.addEventListener('message', function (e) {
     if (e.data.type !== null && e.data.type === 'statusReportHandler') {
       Drupal.StatusReport.statusReceived(e.data.success, e.data.class, e.data.message, e.data.time);
     }
@@ -65,8 +64,8 @@
    * User status behavior for opening and closing status messages.
    */
   Drupal.behaviors.StatusReport = {
-    attach: function(context, settings) {
-      $('tr', context).click(function() {
+    attach: function (context, settings) {
+      $('tr', context).click(function () {
         $(this).toggleClass('open');
       });
     }

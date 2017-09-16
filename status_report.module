@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Main module file for Status Report module.
@@ -23,7 +24,7 @@ function status_report_menu() {
     'title' => 'Integration Status Report',
     'description' => 'Status page for 3rd party integrations',
     'type' => MENU_NORMAL_ITEM,
-    'access callback' => 'status_report_access',
+    'access arguments' => ['administer site configuration'],
     'page callback' => 'status_report_page',
   ];
 
@@ -31,19 +32,12 @@ function status_report_menu() {
     'title' => 'Status Report callback',
     'description' => 'Callback for Status Report handler classes.',
     'type' => MENU_CALLBACK,
-    'access callback' => 'status_report_access',
+    'access arguments' => ['administer site configuration'],
     'page callback' => 'status_report_class_callback',
     'page arguments' => [3],
   ];
 
   return $items;
-}
-
-/**
- * Access callback for status page.
- */
-function status_report_access() {
-  return user_access('administer site configuration');
 }
 
 /**

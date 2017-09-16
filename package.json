@@ -1,0 +1,9 @@
+{
+  "name": "status_report",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NPM dependencies for status_report project",
+  "devDependencies": {
+    "eslint": "^3.19.0"
+  }
+}
