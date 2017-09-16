@@ -2,5 +2,4 @@ name = Status Report
 description = Checks the status of third party dependencies.
 core = 7.x
 package = Other
-version = 7.x-1
 files[] = status/status_report.handler.inc

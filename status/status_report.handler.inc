@@ -1,26 +1,43 @@
 <?php
-/**
- * @file
- * StatusReport class for extension by status subclasses.
- */
 
 /**
  * Class StatusReport.
  */
 abstract class StatusReport {
-  // Name of the status handler, set by info().
+
+  /**
+   * Name of the status handler, set by info().
+   *
+   * @var string
+   */
   public $name;
 
-  // Description of the status handler, set by info().
+  /**
+   * Description of the status handler, set by info().
+   *
+   * @var string
+   */
   public $description;
 
-  // Javascript file for the status handler, set by info().
+  /**
+   * Javascript file for the status handler, set by info().
+   *
+   * @var string
+   */
   public $js;
 
-  // Whether or not to use the callback in the status handler, set by info().
+  /**
+   * Whether or not to use the callback in the status handler, set by info().
+   *
+   * @var bool
+   */
   public $useCallback;
 
-  // Whether the status callback needs to be performed over https.
+  /**
+   * Whether the status callback needs to be performed over https.
+   *
+   * @var bool
+   */
   public $secureCallback;
 
   /**
@@ -81,6 +98,7 @@ abstract class StatusReport {
 
     // Encode the results as a json response and return in a postMessage.
     $encoded_js_result = drupal_json_encode($results);
+
     return '<script type="text/javascript">parent.postMessage(' . $encoded_js_result . ',"*");</script>';
   }
 
@@ -109,6 +127,7 @@ abstract class StatusReport {
     $no_info_message = t('Please specify an info hook for status %class.', [
       '%class' => get_class($this),
     ]);
+
     return [
       'name' => $no_info_message,
       'description' => $no_info_message,
