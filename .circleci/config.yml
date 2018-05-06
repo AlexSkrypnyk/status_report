@@ -55,7 +55,7 @@ jobs:
             if [ \"$SHOULD_DEPLOY\" != \"\" ]; then
               git config --global push.default matching
               git remote add drupalorg $DEPLOY_REMOTE
-              git push --tags drupalorg
+              git push drupalorg && git push --tags drupalorg
             else
               echo "Skipping deployment"
             fi
