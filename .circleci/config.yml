@@ -1,0 +1,78 @@
+version: 2
+aliases:
+  - &deploy_ssh_fingerprint "2d:71:4d:aa:4d:34:38:b5:8f:af:ca:3b:d4:82:6a:21"
+  - &container_config
+    working_directory: /app
+    environment: &container_config_environment
+      DEPLOY_SSH_FINGERPRINT: *deploy_ssh_fingerprint
+    docker:
+      - image: integratedexperts/circleci2-builder
+        environment:
+          COMPOSER_ALLOW_SUPERUSER: 1
+          COMPOSE_FILE: docker-compose.yml:docker-compose.ci.yml
+          # How often to cache DB dump for.
+          DB_TIMESTAMP: +%Y_%m_%d
+  - &step_configure_git
+    run:
+      name: Configure git
+      command: |
+        git config --global user.email "$DEPLOY_USER_EMAIL" && git config --global user.name "$DEPLOY_USER_NAME"
+        mkdir -p ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+        DEPLOY_SSH_FILE="${DEPLOY_SSH_FINGERPRINT//:}" && DEPLOY_SSH_FILE="id_rsa_${DEPLOY_SSH_FILE//\"}" && ssh-add -D && ssh-add ~/.ssh/$DEPLOY_SSH_FILE
+
+jobs:
+  build:
+    <<: *container_config
+    parallelism: 2
+    steps:
+      - attach_workspace:
+          at: /workspace
+      - checkout
+      - run:
+          name: Composer validate.
+          command: composer validate --ansi --strict
+      - run:
+          name: Install dev dependencies.
+          command: |
+            composer install --ansi
+      - run:
+          name: Lint code.
+          command: composer cs
+
+  deploy:
+    <<: *container_config
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - *deploy_ssh_fingerprint
+      - *step_configure_git
+      - attach_workspace:
+          at: /workspace
+      - run:
+          name: Push artefact to remote repository
+          command: |
+            if [ \"$SHOULD_DEPLOY\" != \"\" ]; then
+              git fetch --unshallow
+              git remote add drupalorg $DEPLOY_USER_NAME@$DEPLOY_REMOTE
+              git push drupalorg $CIRCLE_BRANCH
+            else
+              echo "Skipping deployment"
+            fi
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - deploy:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^(?:7|8)\.x\-[0-9]+\.[0-9]+(?:[A-z\-])*$/
+            branches:
+              ignore: /.*/
