@@ -25,10 +25,11 @@
   "require-dev": {
     "beet/box": "^0.7.2",
     "drupal/coder": "^8.2.5",
-    "mouf/nodejs-installer": "^1.0"
+    "mouf/nodejs-installer": "^1.0",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4"
   },
   "scripts": {
-    "cs": "phpcs --runtime-set installed_paths $(pwd)/vendor/drupal/coder/coder_sniffer --runtime-set eslint_path $(pwd)/node_modules/.bin/eslint",
+    "cs": "phpcs --runtime-set eslint_path $(pwd)/node_modules/.bin/eslint",
     "post-install-cmd": [
       "npm install"
     ],
