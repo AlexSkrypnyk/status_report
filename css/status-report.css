@@ -2,10 +2,6 @@
  * @file
  * Status Report styles.
  */
-.page-admin-reports .path-admin-reports-status-report span.icon {
-  background: url('../img/status-report-menu.png') no-repeat 0 0;
-}
-
 .page-admin-reports tr td {
   background: none;
   min-width: 25px;
