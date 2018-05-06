@@ -3,7 +3,7 @@
 .gitattributes            export-ignore
 .gitignore                export-ignore
 .github                   export-ignore
-.circle                   export-ignore
+.circleci/config.yml      export-ignore
 composer.json             export-ignore
 composer.lock             export-ignore
 .eslintrc                 export-ignore
