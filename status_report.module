@@ -24,7 +24,7 @@ function status_report_menu() {
     'title' => 'Integration Status Report',
     'description' => 'Status page for 3rd party integrations',
     'type' => MENU_NORMAL_ITEM,
-    'access arguments' => ['administer site configuration'],
+    'access callback' => 'status_report_access_callback',
     'page callback' => 'status_report_page',
   ];
 
@@ -32,12 +32,31 @@ function status_report_menu() {
     'title' => 'Status Report callback',
     'description' => 'Callback for Status Report handler classes.',
     'type' => MENU_CALLBACK,
-    'access arguments' => ['administer site configuration'],
+    'access callback' => 'status_report_access_callback',
     'page callback' => 'status_report_class_callback',
     'page arguments' => [3],
   ];
 
   return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function status_report_permission() {
+  return [
+    'access integration status report' => [
+      'title' => t('Access integration status report'),
+      'description' => t('Access integration status report page and use callbacks'),
+    ],
+  ];
+}
+
+/**
+ * Access callback.
+ */
+function status_report_access_callback() {
+  return user_access('administer site configuration') || user_access('access integration status report');
 }
 
 /**
