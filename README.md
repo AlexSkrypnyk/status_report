@@ -1,9 +1,9 @@
 # Status Report Drupal module
 ## Drupal module to provide statuses for integration services that can be intermittent and unstable.
 
-[![Circle CI](https://circleci.com/gh/integratedexperts/status_report.svg?style=shield)](https://circleci.com/gh/alexdesignworks/status_report)
+[![CircleCI](https://circleci.com/gh/integratedexperts/status_report.svg?style=shield)](https://circleci.com/gh/integratedexperts/status_report)
 
-![sacreenshot](https://user-images.githubusercontent.com/378794/39668688-daf598bc-5117-11e8-9d15-5459278d164e.png)
+![screenshot](https://user-images.githubusercontent.com/378794/39668688-daf598bc-5117-11e8-9d15-5459278d164e.png)
 
 ## Why? 
 If your module provides a 3rd party integration and you want to know that connection is configured correctly, this module allows to see all the response information in within a single page.
