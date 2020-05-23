@@ -1,0 +1,7 @@
+name = Status Report test
+description = Status report test module
+core = 7.x
+package = other
+hidden = TRUE
+
+dependencies[]=status_report

@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Test for Status Report module.
+ */
+
+/**
+ * Class StatusReportWebTestCase.
+ */
+class StatusReportWebTestCase extends DrupalWebTestCase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getInfo() {
+    return [
+      'name' => 'Status Report test',
+      'description' => 'Test of Status Report functionality.',
+      'group' => 'Other',
+    ];
+  }
+
+  /**
+   * Passing fixture assertion.
+   */
+  public function testTrue() {
+    $this->pass('Passing fixture assertion');
+  }
+
+}

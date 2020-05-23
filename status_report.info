@@ -3,3 +3,5 @@ description = Checks the status of third party dependencies.
 core = 7.x
 package = Other
 files[] = status/status_report.handler.inc
+
+files[] = tests/status_report.test
