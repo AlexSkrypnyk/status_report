@@ -12,11 +12,18 @@ composer validate --ansi --strict
 [ -d build ] && echo "==> Remove existing build directory" && chmod -Rf 777 build && rm -rf build
 
 echo "==> Initialise Drupal site from the latest scaffold"
-php -d memory_limit=-1 "$(command -v composer)" create-project drupal-composer/drupal-project:7.x-dev build --no-interaction
+php -d memory_limit=-1 "$(command -v composer)" -vvv create-project drupal-composer/drupal-project:7.x-dev build --no-interaction --no-install
+
+echo "==> Patch scaffolding before install"
+cat <<< "$(jq --indent 4 '.require["drupal-composer/preserve-paths"] = "dev-master"' build/composer.json)" > build/composer.json
+
+echo "==> Install"
+php -d memory_limit=-1 "$(command -v composer)" --working-dir=build install --no-interaction
 
 echo "==> Apply custom patches"
 pushd "$(pwd)/build/web" > /dev/null || exit 1
 curl -s https://www.drupal.org/files/issues/2019-02-21/1713332-83.patch | patch -p1 -f
+curl -s https://www.drupal.org/files/issues/2020-01-28/3085098-20.patch | patch -p1 -f
 popd > /dev/null || exit 1
 
 echo "==> Install additional dev dependencies from module's composer.json"
