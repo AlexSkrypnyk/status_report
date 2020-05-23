@@ -1,17 +1,17 @@
 {
   "name": "integratedexperts/status_report",
-  "description": "Drupal module to provide statuses for integration services that can be intermittent and unstable.",
+  "description": "Drupal module to provide API integration report.",
   "license": "GPL-2.0-or-later",
   "keywords": [
     "drupal",
-    "rest",
+    "api",
     "services"
   ],
   "homepage": "https://github.com/integratedexperts/status_report",
   "authors": [
     {
       "name": "Alex Skrypnyk",
-      "email": "alex.designworks@gmail.com"
+      "email": "alex@integratedexperts.com"
     },
     {
       "name": "Marton Bodonyi",
@@ -21,20 +21,5 @@
   "support": {
     "issues": "https://github.com/integratedexperts/status_report/issues",
     "source": "https://github.com/integratedexperts/status_report"
-  },
-  "require-dev": {
-    "beet/box": "^0.7.2",
-    "drupal/coder": "^8.2.5",
-    "mouf/nodejs-installer": "^1.0",
-    "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4"
-  },
-  "scripts": {
-    "cs": "phpcs --runtime-set eslint_path $(pwd)/node_modules/.bin/eslint",
-    "post-install-cmd": [
-      "npm install"
-    ],
-    "post-update-cmd": [
-      "npm install"
-    ]
   }
 }
