@@ -1,5 +1,2 @@
-vendor
-node_modules
-Vagrantfile
-vagrant.d
-.beetbox
+composer.lock
+build
